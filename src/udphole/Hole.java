@@ -22,8 +22,8 @@ public class Hole {
         socket.send(poolPacket);
         poolPacket.setData(new byte[1024]);
         socket.receive(poolPacket);
-        if (!new String(poolPacket.getData()).equals(pool)) {
-            throw new IOException("Server didn't receive pool");
+        if (!new String(poolPacket.getData(), 0, poolPacket.getLength()).equals(pool)) {
+            throw new IOException("Server didn't receive pool: " + new String(poolPacket.getData()));
         }
 
         DatagramPacket okPacket = new DatagramPacket("ok".getBytes(), 2, serverAddr, serverPort);
