@@ -2,7 +2,6 @@ package voip;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import udphole.Hole;
@@ -12,8 +11,11 @@ public class VoIP {
     public VoIP(String serverName, int serverPort, String pool) {
         try {
             Hole hole = new Hole(InetAddress.getByName(serverName), serverPort, pool);
-            
-            
+
+            Server server = new Server(hole.getSocket());
+            Client client = new Client(hole.getSocket(), hole.getOutAddress(), hole.getOutPort());
+            server.start();
+            client.start();
         } catch (IOException ex) {
             Logger.getLogger(VoIP.class.getName()).log(Level.SEVERE, null, ex);
         }
